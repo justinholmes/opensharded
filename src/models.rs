@@ -1,17 +1,19 @@
+use std::borrow::Borrow;
 use std::collections::HashMap;
 use std::panic;
 
 use sorted_vec::SortedSet;
+use serde::{Serialize, Deserialize};
 
 #[derive(Debug)]
 pub struct DatacenterLocation {
     locations: HashMap<String, String>,
 }
 
-#[derive(Debug)]
+#[derive(Debug, Deserialize)]
 pub enum DatabaseType { Cassandra, Postgresql, Mysql }
 
-#[derive(Eq, PartialEq, Hash, Debug, Ord, PartialOrd, Clone, Copy)]
+#[derive(Eq, PartialEq, Hash, Debug, Ord, PartialOrd, Clone, Copy, Deserialize)]
 pub enum StorageType { Memory = 1, Nvme = 2, Ssd = 3, Hdd = 4 }
 
 // #[derive(Debug, IntoUserType, FromUserType)]
@@ -69,28 +71,24 @@ impl ApplicationInfo {
 }
 
 
-#[derive(Debug)]
+#[derive(Debug, Deserialize)]
 pub struct ConnectionInfo {
     pub database_type: DatabaseType,
     pub connection_map: HashMap<String, HashMap<StorageType, String>>,
+    #[serde(skip)]
     _storage_types: SortedSet<StorageType>,
 }
 
 impl ConnectionInfo {
-    pub fn new(database_type: DatabaseType, connection_map: HashMap<String,
-        HashMap<StorageType, String>>) -> Self {
-        let values = HashMap::clone(&connection_map);
-        let mut info = ConnectionInfo {
-            database_type,
-            connection_map,
-            _storage_types: SortedSet::new(),
-        };
+    pub fn create_storage_types(mut self) -> Self {
+        let values = HashMap::clone(&self.connection_map);
+
         for class in values.values().into_iter() {
             for key in class.keys().into_iter() {
-                info._storage_types.insert(*key);
+                self._storage_types.insert(*key);
             }
         }
-        info
+        self
     }
 }
 
