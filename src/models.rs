@@ -8,7 +8,7 @@ pub struct DatacenterLocation {
     locations: HashMap<String, String>,
 }
 
-#[derive(Debug)]
+#[derive(Debug, PartialEq)]
 pub enum DatabaseType { Cassandra, Postgresql, Mysql }
 
 #[derive(Eq, PartialEq, Hash, Debug, Ord, PartialOrd, Clone, Copy)]
@@ -94,5 +94,38 @@ impl ConnectionInfo {
     }
 }
 
+#[cfg(test)]
+mod tests {
+    use crate::{ApplicationInfo, ConnectionInfo, DatabaseType, StorageType};
 
+    #[test]
+    fn it_test() {
+        let connection = ConnectionInfo::new(DatabaseType::Postgresql,
+                                             hashmap! { "europe-west1-a".to_string() =>
+                                             hashmap! {StorageType::Hdd =>
+                                                 "postgresql://".to_string(),
+                                                 StorageType::Ssd => "postgresql:".to_string()},
+                "europe-west1-b".to_string() =>
+                hashmap! {StorageType::Hdd => "postgresql:".to_string()},
+                 "us-central-a".to_string() =>
+                hashmap! {StorageType::Hdd => "postgresql:".to_string()},
+                 "us-central-b".to_string() =>
+                hashmap! {StorageType::Ssd => "postgresql:".to_string()},
+            });
+        let info = ApplicationInfo::new(
+            1,
+            "country".to_string(),
+            2,
+            1,
+            connection);
+        let lower_tier_of_storage = info.get_lower_tier_of_storage().unwrap();
+        assert_eq!(StorageType::Hdd, lower_tier_of_storage);
+        assert_eq!(StorageType::Ssd, info.get_connection_info_storage_types()[0]);
+        assert_eq!(DatabaseType::Postgresql, info.connection.database_type);
+        assert_eq!(1, info.minimum_rack_quorum);
+        assert_eq!(2, info.minimum_dc_redundancy);
+        assert_eq!(1, info.application_code);
+        assert_eq!("country".to_string(), info.country_constraints_column);
+    }
+}
 
