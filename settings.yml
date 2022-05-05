@@ -2,7 +2,7 @@ threads: 10
 quorum_level: 2
 
 database_type:
-  Postgresql:
+  Postgresql
 
 connection_map:
       europe-west1-a:

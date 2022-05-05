@@ -77,15 +77,13 @@ pub struct ConnectionInfo {
     pub database_type: DatabaseType,
     pub connection_map: HashMap<String, HashMap<StorageType, String>>,
     #[serde(skip)]
-    _storage_types: SortedSet<StorageType>,
+    _storage_types: SortedSet<StorageType>
 }
 
 impl ConnectionInfo {
     pub fn create_storage_types(mut self) -> Self {
-        let values = HashMap::clone(&self.connection_map);
-
-        for class in values.values().into_iter() {
-            for key in class.keys().into_iter() {
+        for class in self.connection_map.values() {
+            for key in class.keys() {
                 self._storage_types.insert(*key);
             }
         }
