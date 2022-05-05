@@ -1,0 +1,13 @@
+threads: 10
+quorum_level: 2
+
+database_type:
+  Postgresql:
+
+connection_map:
+      europe-west1-a:
+        Ssd: postgresql://ssd.postgres.eu.int.nascency.network
+        Hdd: postgresql://hdd.postgres.eu.int.nascency.network
+      us-central-b:
+        Ssd: postgresql://ssd.postgres.us.int.nascency.network
+        Hdd: postgresql://hdd.postgres.us.int.nascency.network

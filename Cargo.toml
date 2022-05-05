@@ -3,11 +3,10 @@ name = "opensharded"
 version = "0.1.0"
 edition = "2018"
 
-# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
-
 [dependencies]
-scylla = "0.2.1"
-config  = "0.11"
+#scylla = "0.2.1"
 maplit = "1.0.2"
-sorted-vec = "0.5.2"
+sorted-vec = { version = "0.5.2", features = ["serde"]}
 thrift = "0.13.0"
+config = { version= "0.13.1", features = ["yaml"] }
+serde = { version = "1.0.8", features = ["derive"] }
