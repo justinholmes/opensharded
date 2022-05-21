@@ -1,0 +1,16 @@
+threads: 10
+quorum_level: 2
+listen_address: 0.0.0.0:5432
+
+system_db: _oshsystem_
+
+database_type:
+  Postgresql
+
+connection_map:
+  asia-southeast1:
+    Hdd: free-tier6.gcp-asia-southeast1.cockroachlabs.cloud:26257
+  europe-west1:
+    Hdd: free-tier5.gcp-europe-west1.cockroachlabs.cloud:26257
+  us-central1:
+    Hdd: free-tier.gcp-us-central1.cockroachlabs.cloud:26257

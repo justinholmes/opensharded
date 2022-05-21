@@ -11,7 +11,7 @@ pub struct DatacenterLocation {
 }
 
 
-#[derive(Debug, Deserialize, PartialEq)]
+#[derive(Debug, Deserialize, PartialEq, Clone)]
 pub enum DatabaseType { Cassandra, Postgresql, Mysql }
 
 #[derive(Eq, PartialEq, Hash, Debug, Ord, PartialOrd, Clone, Copy, Deserialize)]
@@ -72,7 +72,7 @@ impl ApplicationInfo {
 }
 
 
-#[derive(Debug, Deserialize)]
+#[derive(Debug, Deserialize, Clone)]
 pub struct ConnectionInfo {
     pub database_type: DatabaseType,
     pub connection_map: HashMap<String, HashMap<StorageType, String>>,
@@ -95,6 +95,9 @@ impl ConnectionInfo {
             connection_map,
             _storage_types: Default::default()
         }
+    }
+    pub fn get_connection_map(&self, id: String) -> Option<HashMap<StorageType, String>> {
+        return self.connection_map.get(&*id).cloned();
     }
 }
 
