@@ -14,4 +14,6 @@ serde = { version = "1.0.8", features = ["derive"] }
 tokio = { version = "1.18.2", features = ["full"] }
 log = "0.4.17"
 log4rs = "1.1.1"
+futures = "0.3.21"
 deadpool-postgres = "0.10.2"
+cargo-audit = "0.17.0"
