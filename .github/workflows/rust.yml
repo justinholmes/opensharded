@@ -19,7 +19,7 @@ jobs:
     - name: Build
       run: cargo build --verbose
     - name: audit
-      run: cargo audit --verbose
+      run: cargo audit
     - name: Run tests
       run: cargo test --verbose
       
